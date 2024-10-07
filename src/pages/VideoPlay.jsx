@@ -186,7 +186,6 @@ function VideoPlay() {
                                             Subscribe
                                         </a>
                                     }
-
                                 </span>
                             </div>
                         </section>

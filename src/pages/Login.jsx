@@ -3,6 +3,8 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContextProvider";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import LoginGoogle from "../components/GoogleLogin";
+
 
 function Login() {
   useEffect(() => {
@@ -37,7 +39,6 @@ function Login() {
     try {
       const response = await axios.post(
         "/api/users/login",
-        // "http://localhost:8080/api/v1/users/login",
         formData
       );
       console.log(
@@ -52,17 +53,23 @@ function Login() {
       setLoginError(response.data.message)
       if (response.data.success == true) {
         setTimeout(() => {
-          navigate('/login')
+          navigate('/')
         }, 2000)
       }
 
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       console.error("Error submitting form data:", error.response.data);
       setIsLoading(false)
       setLoginError(error.response.data.message);
     }
   };
+
+  const setErrorGoogle = (errorData) => {
+    setLoginError(errorData)
+    // console.log(errorData);
+  }
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       {!loginError ? (
@@ -218,6 +225,7 @@ function Login() {
               >
                 Sign in
               </button>
+              <LoginGoogle onGoogleError={setErrorGoogle} />
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <a
