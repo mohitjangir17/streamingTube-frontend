@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import History from "./pages/History.jsx";
 import MyVideos from "./pages/MyVideos.jsx";
 import PublishVideo from "./pages/PublishVideo.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const router = createBrowserRouter([
   {
@@ -56,8 +57,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
+    <GoogleOAuthProvider clientId='611699776207-je6172drl7ceameq590ln1oe1bplrfta.apps.googleusercontent.com' >
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );
