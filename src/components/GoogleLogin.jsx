@@ -14,7 +14,6 @@ export default function LoginGoogle({ onGoogleError }) {
                     const { accessToken, user } = response.data.data;
                     login(user, accessToken);
                 }).catch((error) => {
-                    // console.error("User not found", error.response.data.message)
                     onGoogleError(error.response.data.message)
                 })
         },
