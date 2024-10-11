@@ -76,7 +76,7 @@ function VideoPlay() {
         // console.log(channelId);
         axios.post(`/api/subscription/${channelId}/subscribe`)
             .then((response) => {
-                console.log(response.data.data.isChannelSubscribed)
+                console.log(response.data.data.isChannelSubscribed)``
                 setUserSubs(prevState => ({
                     ...prevState, isSubscribed: !userSubs.isSubscribed,
                 }))
