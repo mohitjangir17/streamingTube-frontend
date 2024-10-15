@@ -27,7 +27,7 @@ function MyVideos() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get(`/api/videos/${id}/my-videos?page=${currentPage || 1}&limit=${currentLimit || 10}`, {
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/${id}/my-videos?page=${currentPage || 1}&limit=${currentLimit || 10}`, {
             headers: {
                 Authorization: `${Cookies.get('authToken')}`,
             }
@@ -43,7 +43,7 @@ function MyVideos() {
 
     const deleteVideo = (videoId) => {
         // e.preventDefault();
-        axios.delete(`/api/videos/${videoId}/delete-video`)
+        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/videos/${videoId}/delete-video`)
             .then((response) => {
                 if (response.data) {
                     console.log("deleted")

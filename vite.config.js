@@ -10,7 +10,7 @@ export default defineConfig({
         // target: 'http://localhost:8080', // Backend server
         target: 'https://api-streamingtube.vercel.app', // Backend server
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
+        // rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
       }
     }
   }

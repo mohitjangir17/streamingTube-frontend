@@ -4,7 +4,6 @@ import axios from "axios";
 import Loader from "../components/Loader";
 import Sidebar from '../components/SideBar'
 
-
 function Home() {
   useEffect(() => {
     // Simulate a network request or some async operation
@@ -17,8 +16,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // axios.get(`/api/videos/`).then((res) => {
-    axios.get(`https://api-streamingtube.vercel.app/api/v1/videos`).then((res) => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/`).then((res) => {
       const data = res.data.data.docs;
       setVideos(data);
     }).catch((error) => console.error(error)

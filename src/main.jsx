@@ -13,6 +13,7 @@ import History from "./pages/History.jsx";
 import MyVideos from "./pages/MyVideos.jsx";
 import PublishVideo from "./pages/PublishVideo.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Playlist from "./pages/Playlists.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/:id/publish-video",
         element: <PublishVideo />,
+      },
+      {
+        path: "/:id/my-playlists",
+        element: <Playlist />,
       },
     ],
   },

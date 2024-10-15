@@ -16,7 +16,7 @@ function History() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get(`/api/users/${id}/history`).then((response) => {
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${id}/history`).then((response) => {
             // console.log('video:', response.data.data);
             setVideoHistory(response.data.data)
             // console.log("owner", response.data.data[0].watchHistory[0].owner[0]);

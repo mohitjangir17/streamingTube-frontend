@@ -8,7 +8,7 @@ export default function LoginGoogle({ onGoogleError }) {
     const { login } = useContext(AuthContext)
     const LoginWithGoogle = useGoogleLogin({
         onSuccess: async (authResult) => {
-            axios.get(`/api/users/google-login?code=${authResult.code}`)
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/google-login?code=${authResult.code}`)
                 .then((response) => {
                     console.log(response.data)
                     const { accessToken, user } = response.data.data;
