@@ -38,7 +38,7 @@ function Login() {
     setIsLoading(true)
     try {
       const response = await axios.post(
-        "${import.meta.env.VITE_API_BASE_URL}/users/login",
+        `${import.meta.env.VITE_API_BASE_URL}/users/login`,
         formData
       );
       console.log(
