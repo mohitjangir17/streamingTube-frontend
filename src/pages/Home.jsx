@@ -17,15 +17,15 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`/api/videos/`).then((res) => {
+    // axios.get(`/api/videos/`).then((res) => {
+    axios.get(`https://api-streamingtube.vercel.app/api/v1/videos`).then((res) => {
       const data = res.data.data.docs;
       setVideos(data);
-    });
+    }).catch((error) => console.error(error)
+    )
   }, []);
   return (
-
     <>
-
       <Sidebar />
       <div className="p-4 sm:ml-64">{isLoading ? <Loader /> :
         <div className="flex justify-center">
