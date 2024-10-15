@@ -54,7 +54,7 @@ function Register() {
         formToSend.append('coverImage', formData.coverImage); // Append cover image file
 
         try {
-            const response = await axios.post('/api/users/register', formToSend, {
+            const response = await axios.post('${import.meta.env.VITE_API_BASE_URL}/users/register', formToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Automatically handled, but this is for clarity
                 },

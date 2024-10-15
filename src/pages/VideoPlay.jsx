@@ -37,7 +37,7 @@ function VideoPlay() {
 
 
     useEffect(() => {
-        axios.get(`/api/videos/${id}`,
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/${id}`,
             {
                 headers: { Authorization: `${Cookies.get('authToken')}` }
             })
@@ -51,7 +51,7 @@ function VideoPlay() {
 
     useEffect(() => {
         if (video?.owner?.[0]?.username) {  // Safely checking if the owner and username exist
-            axios.get(`/api/users/c/${video.owner[0].username}`, {
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/c/${video.owner[0].username}`, {
                 headers: { Authorization: `${Cookies.get('authToken')}` }
             })
                 .then((response) => {
@@ -74,7 +74,7 @@ function VideoPlay() {
 
     const subscribeChannel = (channelId) => {
         // console.log(channelId);
-        axios.post(`/api/subscription/${channelId}/subscribe`)
+        axios.post(`${import.meta.env.VITE_API_BASE_URL}/subscription/${channelId}/subscribe`)
             .then((response) => {
                 console.log(response.data.data.isChannelSubscribed)``
                 setUserSubs(prevState => ({
@@ -84,7 +84,7 @@ function VideoPlay() {
     }
 
     const deleteIndividualComment = (commentId) => {
-        axios.delete(`/api/comment/${video._id}/delete-comment/${commentId}`)
+        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/delete-comment/${commentId}`)
             .then((res) => {
                 // console.log((res.data))
                 if (res.data.success) {
@@ -97,7 +97,7 @@ function VideoPlay() {
     }
 
     const getVideoComments = () => {
-        axios.get(`/api/comment/${video._id}/get-comments?page=${currentPage || 1}&limit=${currentLimit || 10}`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/get-comments?page=${currentPage || 1}&limit=${currentLimit || 10}`)
             .then((res) => {
                 // console.log(res.data.data)
                 setUserComment(res.data.data.docs)
@@ -109,7 +109,7 @@ function VideoPlay() {
     }
 
     const commentOnVideo = (videoId) => {
-        axios.post(`/api/comment/${videoId}/add-comment`, { comment: newComment }, {
+        axios.post(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/add-comment`, { comment: newComment }, {
             headers:
             {
                 Authorization: `${Cookies.get('authToken')}`
@@ -130,7 +130,7 @@ function VideoPlay() {
         console.log("video:", videoId);
         console.log("comment:", commentId);
 
-        axios.patch(`/api/comment/${videoId}/update-comment/${commentId}`,
+        axios.patch(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/update-comment/${commentId}`,
             { comment: updateComment })
             .then((res) => {
                 if (res.data.success) {

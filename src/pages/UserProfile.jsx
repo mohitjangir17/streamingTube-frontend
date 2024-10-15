@@ -28,7 +28,7 @@ function UserProfile() {
         const formData = new FormData();
         formData.append('coverImage', selectedFile);
         try {
-            const response = await axios.patch('/api/users/update-cover-image', formData, {
+            const response = await axios.patch('${import.meta.env.VITE_API_BASE_URL}/users/update-cover-image', formData, {
                 headers: {
                     Authorization: `${Cookies.get('authToken')}`,
                     'Content-Type': 'multipart/form-data',
@@ -43,7 +43,7 @@ function UserProfile() {
         }
     }
     useEffect(() => {
-        axios.get(`/api/users/c/${username}`, {
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/c/${username}`, {
             headers: {
                 Authorization: `${Cookies.get('authToken')}`,
                 // 'Content-Type': 'multipart/form-data',
