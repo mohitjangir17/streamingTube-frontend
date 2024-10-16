@@ -16,11 +16,12 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/`).then((res) => {
-      const data = res.data.data.docs;
-      setVideos(data);
-    }).catch((error) => console.error(error)
-    )
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/`)
+      .then((res) => {
+        const data = res.data.data.docs;
+        setVideos(data);
+      })
+      .catch((error) => console.error(error))
   }, []);
   return (
     <>
