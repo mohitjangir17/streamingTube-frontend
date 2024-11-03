@@ -84,7 +84,12 @@ function VideoPlay() {
     }
 
     const deleteIndividualComment = (commentId) => {
-        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/delete-comment/${commentId}`)
+        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/delete-comment/${commentId}`, {
+            headers:
+            {
+                Authorization: `${Cookies.get('authToken')}`
+            }
+        })
             .then((res) => {
                 // console.log((res.data))
                 if (res.data.success) {
