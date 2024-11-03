@@ -41,10 +41,6 @@ function Login() {
         `${import.meta.env.VITE_API_BASE_URL}/users/login`,
         formData
       );
-      console.log(
-        "Form data submitted successfully:"
-        //  response.data
-      );
 
       const { accessToken, user } = response.data.data;
       login(user, accessToken);
