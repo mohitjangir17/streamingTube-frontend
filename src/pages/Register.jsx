@@ -50,13 +50,13 @@ function Register() {
         formToSend.append('username', formData.username);
         formToSend.append('fullName', formData.fullName);
         formToSend.append('password', formData.password);
-        formToSend.append('avatar', formData.avatar);        // Append avatar file
-        formToSend.append('coverImage', formData.coverImage); // Append cover image file
+        formToSend.append('avatar', formData.avatar);
+        formToSend.append('coverImage', formData.coverImage);
 
         try {
             const response = await axios.post('${import.meta.env.VITE_API_BASE_URL}/users/register', formToSend, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Automatically handled, but this is for clarity
+                    'Content-Type': 'multipart/form-data',
                 },
             })
             console.log(response.data)

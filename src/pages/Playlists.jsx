@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import Sidebar from "../components/SideBar";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "../context/AuthContextProvider";
+import Cookies from "js-cookie";
+// import { AuthContext } from "../context/AuthContextProvider";
 
 function Playlist() {
     const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +17,12 @@ function Playlist() {
     const [myPlaylists, setMyPlaylists] = useState([])
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/playlist/${id}/all`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/playlist/${id}/all`, {
+            headers:
+            {
+                Authorization: `${Cookies.get('authToken')}`
+            }
+        })
             .then((response) => {
                 console.log(response.data)
                 setMyPlaylists(response.data.data)

@@ -10,8 +10,8 @@ function Navigation() {
   const navigate = useNavigate()
 
   function logoutAccount() {
-    navigate('/login')
     logout()
+    // navigate('/login')
   }
 
   return (

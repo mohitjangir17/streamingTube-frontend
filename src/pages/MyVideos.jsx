@@ -43,7 +43,12 @@ function MyVideos() {
 
     const deleteVideo = (videoId) => {
         // e.preventDefault();
-        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/videos/${videoId}/delete-video`)
+        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/videos/${videoId}/delete-video`, {}, {
+            headers:
+            {
+                Authorization: `${Cookies.get('authToken')}`
+            }
+        })
             .then((response) => {
                 if (response.data) {
                     console.log("deleted")

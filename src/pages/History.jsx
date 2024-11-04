@@ -3,6 +3,7 @@ import Loader from "../components/Loader";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "../components/SideBar";
+import Cookies from "js-cookie";
 
 function History() {
     useEffect(() => {
@@ -16,7 +17,12 @@ function History() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${id}/history`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/${id}/history`, {
+            headers:
+            {
+                Authorization: `${Cookies.get('authToken')}`
+            }
+        })
             .then((response) => {
                 // console.log('video:', response.data.data);
                 setVideoHistory(response.data.data)
