@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import Sidebar from "../components/SideBar";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { AuthContext } from "../context/AuthContextProvider";
+// import { AuthContext } from "../context/AuthContextProvider";
 
 function Playlist() {
     const [isLoading, setIsLoading] = useState(true);
