@@ -7,7 +7,6 @@ export const AuthContext = React.createContext();
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([]);
-
   useEffect(() => {
     const storedUser = Cookies.get("user");
     if (storedUser) {
@@ -22,7 +21,12 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = () => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/users/logout`)
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/users/logout`, {}, {
+      headers:
+      {
+        Authorization: `${Cookies.get('authToken')}`
+      }
+    })
       .then((response) => {
         if (response.data.success) {
           setUser(null);

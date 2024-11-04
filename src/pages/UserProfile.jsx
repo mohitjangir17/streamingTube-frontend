@@ -46,7 +46,6 @@ function UserProfile() {
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/c/${username}`, {
             headers: {
                 Authorization: `${Cookies.get('authToken')}`,
-                // 'Content-Type': 'multipart/form-data',
             }
         }).then((response) => {
             // console.log(response.data);
