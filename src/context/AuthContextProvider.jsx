@@ -22,7 +22,9 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = () => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/users/logout`)
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/users/logout`, {
+                headers: { Authorization: `${Cookies.get('authToken')}` }
+            })
       .then((response) => {
         if (response.data.success) {
           setUser(null);
