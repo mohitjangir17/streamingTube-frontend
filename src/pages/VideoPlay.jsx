@@ -78,10 +78,11 @@ function VideoPlay() {
             }
         })
             .then((response) => {
-                console.log(response.data.data.isChannelSubscribed)``
-                setUserSubs(prevState => ({
-                    ...prevState, isSubscribed: !userSubs.isSubscribed,
-                }))
+                if (response.data.data.isChannelSubscribed) {
+                    setUserSubs(prevState => ({
+                        ...prevState, isSubscribed: !userSubs.isSubscribed,
+                    }))
+                }
             })
     }
 
@@ -134,8 +135,8 @@ function VideoPlay() {
     }
 
     const commentUpdate = (videoId, commentId) => {
-        console.log("video:", videoId);
-        console.log("comment:", commentId);
+        // console.log("video:", videoId);
+        // console.log("comment:", commentId);
 
         axios.patch(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/update-comment/${commentId}`,
             { comment: updateComment }, {

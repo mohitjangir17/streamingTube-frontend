@@ -59,7 +59,7 @@ function Register() {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            console.log(response.data)
+            // console.log(response.data)
             setIsLoading(false)
             setRegisterError(response.data.message)
             if (response.data.success == true) {

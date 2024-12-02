@@ -24,7 +24,7 @@ function Playlist() {
             }
         })
             .then((response) => {
-                console.log(response.data)
+                // console.log(response.data)
                 setMyPlaylists(response.data.data)
             })
             .catch((error) => console.error(error.response.data)
