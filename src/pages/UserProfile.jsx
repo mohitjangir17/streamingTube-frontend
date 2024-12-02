@@ -34,7 +34,7 @@ function UserProfile() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(response.data);
+            // console.log(response.data);
             Cookies.set("user", JSON.stringify(response.data.data), { expires: 7 });
             setUpdateCoverFormVisible(false)
             setupCiMessage(response.data.message)

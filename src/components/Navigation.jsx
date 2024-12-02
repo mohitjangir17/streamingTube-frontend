@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 function Navigation() {
   const { user, logout } = useContext(AuthContext);
   const [toggleUserOptions, setToggleUserOptions] = useState(false)
+  // const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
 
   function logoutAccount() {
     logout()
-    // navigate('/login')
+    navigate('/login')
   }
 
   return (

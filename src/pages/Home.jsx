@@ -5,21 +5,23 @@ import Loader from "../components/Loader";
 import Sidebar from '../components/SideBar'
 
 function Home() {
-  useEffect(() => {
-    // Simulate a network request or some async operation
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Adjust the timeout as needed
-  }, []);
+  // useEffect(() => {
+  //   // Simulate a network request or some async operation
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 2000); // Adjust the timeout as needed
+  // }, []);
 
   const [videos, setVideos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/videos/`)
       .then((res) => {
         const data = res.data.data.docs;
         setVideos(data);
+        setIsLoading(false);
       })
       .catch((error) => console.error(error))
   }, []);

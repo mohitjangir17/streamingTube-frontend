@@ -51,7 +51,7 @@ function MyVideos() {
         })
             .then((response) => {
                 if (response.data) {
-                    console.log("deleted")
+                    // console.log("deleted")
                     navigate(0)
                 }
             }
