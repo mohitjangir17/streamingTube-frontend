@@ -10,7 +10,8 @@ import VideoPlay from "./pages/VideoPlay";
 import History from "./pages/History";
 import MyVideos from "./pages/MyVideos";
 import PublishVideo from "./pages/PublishVideo";
-import Playlist from "./pages/Playlists";
+import Playlists from "./pages/Playlists";
+import Playlist from "./pages/Playlist";
 import { PrivateRoutes } from "./components/ProtectedRoute";
 
 function App() {
@@ -27,11 +28,12 @@ function App() {
 
         {/* private routes */}
         <Route element={<PrivateRoutes />}>
-          <Route path="/:id/my-videos" element={<MyVideos />} />
           <Route path="/:username" element={<UserProfile />} />
           <Route path=":id/history" element={<History />} />
-          <Route path="/:id/my-playlists" element={<Playlist />} />
+          <Route path="/:id/my-videos" element={<MyVideos />} />
           <Route path="/:id/publish-video" element={<PublishVideo />} />
+          <Route path="/:id/my-playlists" element={<Playlists />} />
+          <Route path="/:id/my-playlists/:playlistId" element={< Playlist />} />
         </Route>
         {/**********/}
 
