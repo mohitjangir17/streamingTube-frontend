@@ -4,42 +4,42 @@ import Sidebar from "../components/SideBar";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-// import { AuthContext } from "../context/AuthContextProvider";
 
 function Playlist() {
     const [isLoading, setIsLoading] = useState(true);
+    const [playlist, setPlaylist] = useState();
     const [errorBox, setErrorBox] = useState('')
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setIsLoading(false);
-    //     }, 2000);
-    // }, []);
-    const { id } = useParams()
-    const [myPlaylists, setMyPlaylists] = useState([])
-    const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
-    const [triggerFetch, setTriggerFetch] = useState(false);
     const [newPlaylist, setNewPlaylist] = useState({
         name: '',
         description: ''
     })
     const [isCreatePlaylistViewVisible, setIsCreatePlaylistViewVisible] = useState(false);
+    const { id } = useParams()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    }, []);
+    // const { id } = useParams()
+    const { playlistId } = useParams()
 
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/playlist/${id}/all`, {
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/playlist/${playlistId}`, {
             headers:
             {
                 Authorization: `${Cookies.get('authToken')}`
             }
         })
             .then((response) => {
-                // console.log(response.data)
-                setMyPlaylists(response.data.data)
-                setIsLoading(false)
+                setPlaylist(response.data.data[0])
+                setIsLoading(false);
             })
             .catch((error) => console.error(error.response.data)
             )
-    }, [id, triggerFetch]);
+    }, [playlistId]);
 
     const createPlaylist = (e) => {
         e.preventDefault()
@@ -49,14 +49,14 @@ function Playlist() {
                 Authorization: `${Cookies.get('authToken')}`
             }
         })
-            .then(() => {
-                // console.log(response.data)
+            .then((response) => {
+                console.log(response.data)
                 setIsCreatePlaylistViewVisible(false)
                 setNewPlaylist({
                     name: '',
                     description: ''
                 })
-                setTriggerFetch((prev) => !prev);
+                navigate(`/${id}/my-playlists`)
             })
             .catch((error) => {
                 setErrorBox(error.response.data.message)
@@ -64,32 +64,12 @@ function Playlist() {
                 // console.error(error)
             }
             )
+
     }
 
     const handleChange = (e) => {
         setNewPlaylist({ ...newPlaylist, [e.target.name]: e.target.value });
     }
-
-    const toggleDropdown = (id) => {
-        setActiveDropdownIndex(activeDropdownIndex === id ? null : id);
-    };
-
-    const deletePlaylist = (playlistid) => {
-        axios.delete(`${import.meta.env.VITE_API_BASE_URL}/playlist/${playlistid}/delete-playlist`, {
-            headers:
-            {
-                Authorization: `${Cookies.get('authToken')}`
-            }
-        }, {})
-            .then(() => {
-                setTriggerFetch((prev) => !prev);
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-
-            })
-    }
-    const navigate = useNavigate()
     return (
         <>
             {!errorBox ? (
@@ -129,7 +109,7 @@ function Playlist() {
                 <div className="p-4 sm:ml-64  max-w-screen-xl ">
                     <Sidebar />
                     <span className="flex justify-between">
-                        <h2 className="text-2xl text-white font-bold mb-2">My Playlists</h2>
+                        <h2 className="text-2xl text-white font-bold mb-2"> {String(playlist.name).charAt(0).toUpperCase() + String(playlist.name).slice(1)}</h2>
                         <button
                             onClick={() => setIsCreatePlaylistViewVisible(!isCreatePlaylistViewVisible)}
                             type="button"
@@ -154,9 +134,17 @@ function Playlist() {
                         </button>
                     </span>
                     <hr className="border-gray-700 mb-4" />
+
+                    <img
+                        src={playlist?.thumbnail || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLxGmXcf9_fmYooOzU_3IQtGdZ4R62xvDP8w&s`}
+                        alt={playlist?.name}
+                        className="mb-4 w-full h-48 object-cover"
+                    />
+
+                    <hr className="border-gray-700 mb-4" />
                     <ul className="">
 
-                        {myPlaylists.length == 0 ?
+                        {playlist.videoData.length == 0 ?
                             <span className="flex justify-center gap-2 my-8" >
                                 <h2 className="text-2xl text-white font-bold mb-2">Start Creating Your Playlists ...</h2>
                                 <button
@@ -182,69 +170,45 @@ function Playlist() {
                                     Create Playlist
                                 </button>
                             </span> :
-                            <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {myPlaylists.map((playlist, index) => (
-                                    <div key={index} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                                        <img
-                                            src={playlist.thumbnail || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLxGmXcf9_fmYooOzU_3IQtGdZ4R62xvDP8w&s`}
-                                            alt={playlist.name}
-                                            className="w-full h-48 object-cover"
-                                        />
-                                        <div className="p-4">
-                                            <h3 className="text-xl font-semibold mb-2">{playlist.name}</h3>
-                                            <p className="text-sm">{playlist.description}</p>
-                                            <p className="text-sm">Videos: {playlist.playlistVideos.length}</p>
-                                        </div>
-
-
-                                        <div className="w-full justify-between items-center inline-flex">
-                                            <div className="px-4 py-2">
-                                                <a href={`/${id}/my-playlists/${playlist._id}`}> View full playlist</a>
-                                            </div>
-                                            <div className="w-6 h-6 relative z-9">
-                                                <div className="w-full h-fit flex">
-                                                    <div className="relative w-full z-10">
-                                                        {/* <div className=" absolute left-0 top-0 py-2.5 px-4 text-gray-300"></div> */}
-                                                        <button id="dropdown-button" data-target="dropdown-1"
-                                                            className="w-full justify-center dropdown-toggle flex-shrink-0 z-10 flex items-center text-base font-medium text-center text-gray-900 bg-transparent  absolute right-0 top-0"
-                                                            type="button"
-                                                            onClick={() => toggleDropdown(playlist._id)}
-                                                        >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                                viewBox="0 0 24 24" fill="none">
-                                                                <path
-                                                                    d="M12.0161 16.9893V17.0393M12.0161 11.9756V12.0256M12.0161 6.96191V7.01191"
-                                                                    stroke="white" strokeWidth="3.5"
-                                                                    strokeLinecap="round" />
-                                                            </svg>
-                                                        </button>
-
-                                                        {activeDropdownIndex === playlist._id && (
-                                                            <div id="dropdown-1"
-                                                                className="absolute bottom-2 right-2 right-0 z-50 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 open overflow-visible">
-                                                                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                                                    aria-labelledby="dropdown-button">
-                                                                    <li>
-                                                                        <span
-                                                                            // onClick={() => { toggleIsVisibleUpdateIndividualComment(commentItem._id), setActiveDropdownIndex(null) }}
-                                                                            className="block hover:cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <span
-                                                                            onClick={() => deletePlaylist(playlist._id)}
-                                                                            className="block hover:cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        )}
-
-                                                    </div>
+                            <ul className="">
+                                {
+                                    playlist.videoData.map((item, index) => (
+                                        <a key={index} href={`/videos/${item._id}`}>
+                                            <li className="flex  p-4 bg-gray-800 text-white rounded-lg mb-4">
+                                                <div className="flex-shrink-0 w-40 h-24">
+                                                    <img
+                                                        src={item.videoThumbnail}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover rounded-lg"
+                                                    />
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                                <div className="flex-grow pl-4">
+                                                    <div className="flex justify-between">
+                                                        <h3 className="text-lg font-semibold">{(item.title)}</h3>
+                                                        {/* <button className="text-gray-400 hover:text-white">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth={1.5}
+                                                stroke="currentColor"
+                                                className="w-6 h-6"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        </button> */}
+                                                    </div>
+                                                    <p className="text-gray-400 text-sm">  {item.views} Views • on {new Date(item.createdAt).toLocaleDateString()} </p>
+                                                    <p className="text-gray-400 text-sm mt-1">{item.videoDescription}</p>
+                                                </div>
+                                            </li>
+                                        </a>
+                                    ))}
+                            </ul>
                         }
 
                     </ul>
@@ -252,7 +216,6 @@ function Playlist() {
                     {/* <Pagination totalNumberPages={totalNumberPages} currentPage={currentPage} currentLimit={currentLimit} onpageChange={handlePageChange} /> */}
                 </div >
             }
-
             {!isCreatePlaylistViewVisible ?
                 '' :
                 <div id="popup-modal" tabIndex="-1" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden ">
