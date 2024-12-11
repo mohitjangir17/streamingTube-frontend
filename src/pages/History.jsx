@@ -95,7 +95,7 @@ function History() {
                                             </svg>
                                         </button> */}
                                             </div>
-                                            <p className="text-gray-400 text-sm">{item.views} views • {item.owner[0].fullName}</p>
+                                            <p className="text-gray-400 text-sm">{item.views} views • {item.owner.fullName}</p>
                                             <p className="text-gray-400 text-sm mt-1">{item.description}</p>
                                         </div>
                                     </li>

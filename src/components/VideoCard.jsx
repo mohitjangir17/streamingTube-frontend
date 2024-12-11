@@ -13,7 +13,7 @@ const VideoCard = ({ video }) => {
             alt={video.title}
           />
           <span className="absolute bottom-9 right-2 bg-black text-white text-xs px-2 py-1 rounded">
-            {(Math.floor(video.duration / 60)).toFixed()} : {Math.floor(video.duration % 60)}
+            {(Math.floor(video.duration / 60)).toFixed()} : {Math.floor(video.duration % 60) < 10 ? `0${Math.floor(video.duration % 60)}` : `${Math.floor(video.duration % 60)}`}
           </span>
         </div>
         <div className="px-5 pb-5">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import Loader from "../components/Loader";
@@ -43,19 +43,18 @@ function VideoPlay() {
                 // console.log(response.data)
             })
             .catch((error) => { console.log(error) })
+
+
     }, [id])
 
     useEffect(() => {
         axios.patch(`${import.meta.env.VITE_API_BASE_URL}/videos/${user._id}/${id}/addVideoToUserHistory`,
             { _id: id },
             {
-                headers: {
-                    Authorization: `${Cookies.get('authToken')}`
-                }
-
+                headers: { Authorization: `${Cookies.get('authToken')}` }
             })
-            .then((response) => console.log(response)
-            )
+            // .then((response) => console.log(response)
+            // )
             .catch((error) => console.error(error)
             )
     }, [user._id, id])
@@ -67,22 +66,25 @@ function VideoPlay() {
                     Authorization: `${Cookies.get('authToken')}`
                 }
             })
-                .then(response => {
-                    console.log('View count updated:', response.data);
-                })
+                // .then(response => {
+                //     // console.log('View count updated:', response.data);
+                // })
                 .catch(error => { console.log(error); });
         }, 15000);
 
         return () => {
             clearTimeout(timer)
         }
-    }, [])
+    }, [id])
 
 
     useEffect(() => {
-        if (video?.owner?.[0]?.username) {  // Safely checking if the owner and username exist
+        if (video?.owner?.[0]?.username) {
             axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/c/${video.owner[0].username}`, {
-                headers: { Authorization: `${Cookies.get('authToken')}` }
+                headers: {
+                    Authorization: `${Cookies.get('authToken')
+                        }`
+                }
             })
                 .then((response) => {
                     // console.log(response.data);
@@ -98,9 +100,20 @@ function VideoPlay() {
         }
     }, [video]);
 
+    const getVideoComments = useCallback(() => {
+        axios
+            .get(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/get-comments?page=${currentPage || 1}&limit=${currentLimit || 10}`)
+            .then((res) => {
+                // console.log(res.data.data)
+                setUserComment(res.data.data);
+                setTotalNumberPages(res.data.data.totalPages);
+            })
+            .catch((error) => console.error("Error fetching comments:", error));
+    }, [video._id, currentPage, currentLimit]);
+
     useEffect(() => {
         if (video._id) { getVideoComments() }
-    }, [video._id, currentLimit, currentPage])
+    }, [video._id, currentLimit, currentPage, getVideoComments])
 
     const subscribeChannel = (channelId) => {
         // console.log(channelId);
@@ -127,7 +140,6 @@ function VideoPlay() {
             }
         })
             .then((res) => {
-                // console.log((res.data))
                 if (res.data.success) {
                     getVideoComments()
                 }
@@ -137,17 +149,6 @@ function VideoPlay() {
             )
     }
 
-    const getVideoComments = () => {
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/comment/${video._id}/get-comments?page=${currentPage || 1}&limit=${currentLimit || 10}`)
-            .then((res) => {
-                // console.log(res.data.data)
-                setUserComment(res.data.data.docs)
-                setTotalNumberPages(res.data.data.totalPages)
-            }
-            )
-            .catch((error) => console.log(error)
-            )
-    }
 
     const commentOnVideo = (videoId) => {
         axios.post(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/add-comment`, { comment: newComment }, {
@@ -157,7 +158,7 @@ function VideoPlay() {
             }
         })
             .then((response) => {
-                // console.log(response.data.data) 
+
                 if (response.data.success) {
                     setNewComment('')
                     getVideoComments()
@@ -168,8 +169,7 @@ function VideoPlay() {
     }
 
     const commentUpdate = (videoId, commentId) => {
-        // console.log("video:", videoId);
-        // console.log("comment:", commentId);
+
         axios.patch(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/update-comment/${commentId}`,
             { comment: updateComment }, {
             headers:
@@ -243,7 +243,7 @@ function VideoPlay() {
                     <section className="py-24 relative">
                         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
                             <div className="w-full flex-col justify-start items-start lg:gap-10 gap-6 inline-flex">
-                                <h2 className="text-gray-900 text-3xl font-bold font-manrope leading-normal">{userComment.length} Comments</h2>
+                                <h2 className="text-gray-900 text-3xl font-bold font-manrope leading-normal">{userComment.totalDocs} Comments</h2>
                                 <div className="w-full flex-col justify-start items-start lg:gap-9 gap-6 flex">
                                     <div className="w-full relative flex justify-between gap-2">
                                         <input type="text"
@@ -263,7 +263,7 @@ function VideoPlay() {
                                     </div>
                                     <div className="w-full flex-col justify-start items-start gap-8 flex">
 
-                                        {userComment.map((commentItem, index) => (
+                                        {userComment.docs.map((commentItem, index) => (
                                             < div key={index} className="w-full flex-col justify-start items-end gap-5 flex" >
                                                 <div
                                                     className="w-full p-6 bg-white rounded-2xl border border-gray-200 flex-col justify-start items-start gap-8 flex">
@@ -281,7 +281,6 @@ function VideoPlay() {
                                                                     <h6 className="text-gray-500 text-xs font-normal leading-5">At : {new Date(commentItem.updatedAt).toLocaleString()}</h6>
                                                                 </div>
                                                             </div>
-
 
                                                             {commentItem.userId !== user._id && user._id !== video.owner[0]._id ?
                                                                 ""
