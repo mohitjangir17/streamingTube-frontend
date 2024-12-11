@@ -123,12 +123,19 @@ function MyVideos() {
                                     className="flex p-4 bg-gray-800 text-white rounded-lg mb-4"
                                     onClick={() => window.location.href = `/videos/${item._id}`} // Manually handle the link navigation
                                 >
-                                    <div className="flex-shrink-0 w-40 h-24">
-                                        <img
-                                            src={item.videoThumbnail}
-                                            alt={item.title}
-                                            className="w-full h-full object-cover rounded-lg"
-                                        />
+                                    <div className="relative">
+                                        <div className="flex-shrink-0 w-40 h-24">
+                                            <img
+                                                src={item.videoThumbnail}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover rounded-lg"
+                                            />
+                                        </div>
+                                        <span className="absolute bottom-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">
+                                            {(Math.floor(item.duration / 60)).toFixed()} :{Math.floor(item.duration % 60) < 10 ?
+                                                `0${Math.floor(item.duration % 60)}` :
+                                                `${Math.floor(item.duration % 60)}`}
+                                        </span>
                                     </div>
                                     <div className="flex-grow pl-4">
                                         <div className="flex justify-between">

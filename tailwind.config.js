@@ -6,8 +6,8 @@ export default {
   ],
   theme: {
     extend: {
-      width: {
-        'custom': 'calc(100% - 250px)',
+      height: {
+        'reagisterForm': 'calc(100vh - 90px)',
       },
     },
   },
