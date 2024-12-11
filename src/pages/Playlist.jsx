@@ -35,6 +35,7 @@ function Playlist() {
         })
             .then((response) => {
                 setPlaylist(response.data.data[0])
+                console.log(response.data.data[0])
                 setIsLoading(false);
             })
             .catch((error) => console.error(error.response.data)
