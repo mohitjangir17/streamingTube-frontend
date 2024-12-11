@@ -48,15 +48,17 @@ function VideoPlay() {
     }, [id])
 
     useEffect(() => {
-        axios.patch(`${import.meta.env.VITE_API_BASE_URL}/videos/${user._id}/${id}/addVideoToUserHistory`,
-            { _id: id },
-            {
-                headers: { Authorization: `${Cookies.get('authToken')}` }
-            })
-            // .then((response) => console.log(response)
-            // )
-            .catch((error) => console.error(error)
-            )
+        if (user._id) {
+            axios.patch(`${import.meta.env.VITE_API_BASE_URL}/videos/${user._id}/${id}/addVideoToUserHistory`,
+                { _id: id },
+                {
+                    headers: { Authorization: `${Cookies.get('authToken')}` }
+                })
+                // .then((response) => console.log(response)
+                // )
+                .catch((error) => console.error(error)
+                )
+        }
     }, [user._id, id])
 
     useEffect(() => {
@@ -79,7 +81,7 @@ function VideoPlay() {
 
 
     useEffect(() => {
-        if (video?.owner?.[0]?.username) {
+        if (video?.owner?.[0]?.username && user._id) {
             axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/c/${video.owner[0].username}`, {
                 headers: {
                     Authorization: `${Cookies.get('authToken')
@@ -98,7 +100,7 @@ function VideoPlay() {
                     console.error("Error fetching user subscription data:", error);
                 });
         }
-    }, [video]);
+    }, [video, user._id]);
 
     const getVideoComments = useCallback(() => {
         axios
@@ -148,7 +150,6 @@ function VideoPlay() {
             .catch((error) => console.log(error)
             )
     }
-
 
     const commentOnVideo = (videoId) => {
         axios.post(`${import.meta.env.VITE_API_BASE_URL}/comment/${videoId}/add-comment`, { comment: newComment }, {
@@ -214,28 +215,29 @@ function VideoPlay() {
                     </div>
                     <section className=" p-6 bg-white   rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <div className="flex justify-between items-center">
-                            <span>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{video.views} views</h5>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{video.title}</h5>
+                            <span className="text-sm sm:text-lg">
+                                <h5 className="mb-1  font-bold tracking-tight text-gray-900 dark:text-white">{video.views} views</h5>
+                                <h5 className="mb-1  font-bold tracking-tight text-gray-900 dark:text-white">{video.title}</h5>
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{video.videoDescription}</p>
                             </span>
-                            <span className="flex gap-4">
+                            <span className="flex flex-col gap-4 text-sm sm:text-lg sm:flex-row ">
                                 <span className="flex gap-2">
-                                    <img className="w-12 h-12 rounded-full object-cover" src={video?.owner[0]?.avatar || ""} alt={video.owner[0]?.fullName || ""} />
+                                    <img className="w-10 h-10 rounded-full object-cover" src={video?.owner[0]?.avatar || ""} alt={video.owner[0]?.fullName || ""} />
                                     <span>
-                                        <h4>{video?.owner?.[0]?.fullName}</h4>
-                                        <h4>{userSubs?.subscribers || "0"} Subscribers</h4>
+                                        <h4 className="font-bold">{video?.owner?.[0]?.fullName}</h4>
+                                        <h4 className="font-bold" >{userSubs?.subscribers || "0"} Subscribers</h4>
                                     </span>
                                 </span>
 
-                                {userSubs.isSubscribed ?
-                                    <a href="#" onClick={() => subscribeChannel(video?.owner?.[0]?._id)} className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800`}>
-                                        Subscribed
-                                    </a> :
-                                    <a href="#" onClick={() => subscribeChannel(video?.owner?.[0]?._id)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        Subscribe
-                                    </a>
-                                }
+                                {user._id ?
+                                    userSubs.isSubscribed ?
+                                        <a href="#" onClick={() => subscribeChannel(video?.owner?.[0]?._id)} className={`inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800`}>
+                                            Unsubscribe
+                                        </a> :
+                                        <a href="#" onClick={() => subscribeChannel(video?.owner?.[0]?._id)} className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Subscribe
+                                        </a>
+                                    : ''}
                             </span>
                         </div>
                     </section>
@@ -252,7 +254,7 @@ function VideoPlay() {
                                             onChange={(e) => setNewComment(e.target.value)}
                                             value={newComment}
                                         />
-                                        <button onClick={() => { commentOnVideo(video._id) }} className="absolute right-6 top-[18px]">
+                                        <button onClick={() => { commentOnVideo(video._id) }} disabled={user._id ? false : true} className="absolute right-6 top-[18px]">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
                                                 fill="none">
                                                 <path

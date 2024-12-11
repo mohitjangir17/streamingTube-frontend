@@ -41,7 +41,7 @@ function Navigation() {
               </button>{" "}
             </Link>
           ) : (
-            <div>
+            <div className="relative">
               <button
                 onClick={() => { setToggleUserOptions(!toggleUserOptions) }}
                 type="button"
@@ -58,7 +58,7 @@ function Navigation() {
                 />
               </button>
               {!toggleUserOptions ? "" :
-                <div id="dropdown" className="absolute top-14 lg:right-12  z-20 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <div id="dropdown" className="absolute right-0 top-10  z-20 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                     {/* <li>
                     <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
