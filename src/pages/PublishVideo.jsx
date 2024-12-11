@@ -52,7 +52,7 @@ function PublishVideo() {
         formToSend.append('videoThumbnail', formData.videoThumbnail);
 
         try {
-            const response = await axios.post('${import.meta.env.VITE_API_BASE_URL}/videos/publish-video', formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/videos/publish-video`, formData, {
                 headers: {
                     Authorization: `${Cookies.get('authToken')}`,
                     'Content-Type': 'multipart/form-data', // Automatically handled, but this is for clarity
